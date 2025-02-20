@@ -7,7 +7,6 @@ option java_package = "com.example.grpc.company";
 option java_outer_classname = "CompanyProto";
 
 service CompanyService {
-  rpc getCompany (CompanyRequest) returns (CompanyResponse);
   rpc createCompany (Company) returns (CompanyResponse);
   rpc getAllCompanies (EmptyRequest) returns (CompanyListResponse); // New method
 }

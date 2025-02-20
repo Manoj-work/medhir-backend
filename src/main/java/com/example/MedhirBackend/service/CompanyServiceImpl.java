@@ -28,18 +28,6 @@ public class CompanyServiceImpl extends CompanyServiceGrpc.CompanyServiceImplBas
         System.out.println("CompanyService is initialized and running!");
     }
 
-    @Override
-    public void getCompany(CompanyRequest request, StreamObserver<CompanyResponse> responseObserver) {
-        companyRepository.findById(request.getId()).ifPresentOrElse(company -> {
-            CompanyResponse response = CompanyResponse.newBuilder()
-                    .setMessage("Company found")
-                    .setCompany(company.toGrpcCompany())
-                    .build();
-            responseObserver.onNext(response);
-        }, () -> responseObserver.onNext(CompanyResponse.newBuilder().setMessage("Company Not Found").build()));
-
-        responseObserver.onCompleted();
-    }
 
     @Override
     public void createCompany(Company request, StreamObserver<CompanyResponse> responseObserver) {
