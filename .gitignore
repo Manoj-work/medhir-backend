@@ -21,6 +21,9 @@ target/
 
 # Ignore all .tar files
 *.tar
+# Ignore Gradle files
+.gradle/
+
 
 
 ### NetBeans ###
