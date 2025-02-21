@@ -5,7 +5,7 @@ FROM openjdk:23-jdk
 WORKDIR /app
 
 # Copy the built JAR file into the container
-COPY target/grpcdemo-0.0.1-SNAPSHOT.jar app.jar
+COPY build/libs/MedhirBackend-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the gRPC port (default gRPC port is 9090)
 EXPOSE 9090
