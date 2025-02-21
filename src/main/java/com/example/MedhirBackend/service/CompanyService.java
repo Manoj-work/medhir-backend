@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,51 @@ public class CompanyService {
         return CompanyListResponse.newBuilder()
                 .setMessage(grpcCompanies.isEmpty() ? "No companies found" : "Companies retrieved successfully")
                 .addAllCompanies(grpcCompanies)
+                .build();
+    }
+    public CompanyResponse updateCompany(UpdateCompanyRequest request) {
+        Optional<CompanyModel> optionalCompany = companyRepository.findById(request.getId());
+
+        if (optionalCompany.isEmpty()) {
+            throw new ValidationException("company", "Company not found");
+        }
+
+        CompanyModel company = optionalCompany.get();
+        company.setName(request.getName());
+        company.setEmail(request.getEmail());
+        company.setPhone(request.getPhone());
+        company.setGst(request.getGst());
+        company.setRegAdd(request.getRegAdd());
+
+        Set<ConstraintViolation<CompanyModel>> violations = validator.validate(company);
+        if (!violations.isEmpty()) {
+            String errorMessages = violations.stream()
+                    .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+                    .collect(Collectors.joining(", "));
+
+            System.err.println("Validation Errors: " + errorMessages);
+            throw new ValidationException("Validation Error", errorMessages);
+        }
+
+        CompanyModel updatedCompany = companyRepository.save(company);
+
+        return CompanyResponse.newBuilder()
+                .setMessage("Company Updated Successfully")
+                .setCompany(updatedCompany.toGrpcCompany())
+                .build();
+    }
+
+    public DeleteCompanyResponse deleteCompany(DeleteCompanyRequest request) {
+        Optional<CompanyModel> optionalCompany = companyRepository.findById(request.getId());
+
+        if (optionalCompany.isEmpty()) {
+            throw new ValidationException("company", "Company not found");
+        }
+
+        companyRepository.deleteById(request.getId());
+
+        return DeleteCompanyResponse.newBuilder()
+                .setMessage("Company Deleted Successfully")
                 .build();
     }
 }

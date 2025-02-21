@@ -9,6 +9,8 @@ option java_outer_classname = "CompanyProto";
 service CompanyService {
   rpc createCompany (Company) returns (CompanyResponse);
   rpc getAllCompanies (EmptyRequest) returns (CompanyListResponse); // New method
+  rpc UpdateCompany (UpdateCompanyRequest) returns (CompanyResponse);
+  rpc DeleteCompany (DeleteCompanyRequest) returns (DeleteCompanyResponse);
 }
 
 message CompanyRequest {
@@ -34,4 +36,21 @@ message CompanyResponse {
 message CompanyListResponse { // New response message for returning multiple companies
   string message = 1;
   repeated Company companies = 2; // List of companies
+}
+
+message UpdateCompanyRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  string gst = 5;
+  string regAdd = 6;
+}
+
+message DeleteCompanyRequest{
+  string id = 1;
+}
+
+message DeleteCompanyResponse {
+  string message = 1;
 }

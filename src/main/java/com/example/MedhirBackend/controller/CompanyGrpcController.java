@@ -38,4 +38,26 @@ public class CompanyGrpcController extends CompanyServiceGrpc.CompanyServiceImpl
             responseObserver.onError(Status.INTERNAL.withDescription(ex.getMessage()).asRuntimeException());
         }
     }
+
+    @Override
+    public void updateCompany(UpdateCompanyRequest request, StreamObserver<CompanyResponse> responseObserver) {
+        try {
+            CompanyResponse response = companyService.updateCompany(request);
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            responseObserver.onError(Status.INTERNAL.withDescription(ex.getMessage()).asRuntimeException());
+        }
+    }
+
+    @Override
+    public void deleteCompany(DeleteCompanyRequest request, StreamObserver<DeleteCompanyResponse> responseObserver) {
+        try {
+            DeleteCompanyResponse response = companyService.deleteCompany(request);
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception ex) {
+            responseObserver.onError(Status.INTERNAL.withDescription(ex.getMessage()).asRuntimeException());
+        }
+    }
 }
