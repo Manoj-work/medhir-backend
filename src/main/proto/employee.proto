@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package com.example.employee;
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc.employee";
+option java_outer_classname = "EmployeeProto";
+
+service EmployeeService {
+  rpc CreateEmployee (Employee) returns (EmployeeResponse);
+  rpc GetAllEmployees (EmptyRequest) returns (EmployeeListResponse);
+}
+
+message EmptyRequest {}
+
+message Employee {
+  string id = 1;
+  string name = 2;
+  string title = 3;
+  string email = 4;
+  string phone = 5;
+  string department = 6;
+  string gender = 7;
+  string reporting_manager = 8;
+  string permanent_address = 9;
+  string current_address = 10;
+
+  IDProofs id_proofs = 11;
+  BankDetails bank_details = 12;
+  SalaryDetails salary_details = 13;
+}
+
+message IDProofs {
+  string aadhar_no = 1;
+  string pan_no = 2;
+  string passport = 3;
+  string driving_license = 4;
+  string voter_id = 5;
+}
+
+message BankDetails {
+  string account_number = 1;
+  string account_holder_name = 2;
+  string ifsc_code = 3;
+  string bank_name = 4;
+  string branch_name = 5;
+}
+
+message SalaryDetails {
+  double total_ctc = 1;
+  double basic = 2;
+  double allowances = 3;
+  double hra = 4;
+  double pf = 5;
+}
+
+message EmployeeResponse {
+  string message = 1;
+  Employee employee = 2;
+}
+
+message EmployeeListResponse {
+  string message = 1;
+  repeated Employee employees = 2;
+}
