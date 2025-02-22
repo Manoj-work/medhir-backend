@@ -1,16 +1,18 @@
 package com.example.MedhirBackend.model;
 
 import com.example.grpc.employee.Employee;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -29,14 +31,18 @@ public class EmployeeModel {
     @Email(message = "Invalid email format")
     private String email;
 
+    @Size(min = 0, max = 10) // Allows empty but restricts length
+    @Pattern(regexp = "^$|^[0-9]{10}$", message = "Phone number must be 10 digits if provided")
     private String phone;
+
+
     private String department;
     private String gender;
     private String reportingManager;
     private String permanentAddress;
     private String currentAddress;
 
-    private Map<String, String> idProofs;
+    private IdProofs idProofs;
     private BankDetails bankDetails;
     private SalaryDetails salaryDetails;
 
@@ -52,30 +58,9 @@ public class EmployeeModel {
                 .setReportingManager(reportingManager == null ? "" : reportingManager)
                 .setPermanentAddress(permanentAddress == null ? "" : permanentAddress)
                 .setCurrentAddress(currentAddress == null ? "" : currentAddress)
+                .setIdProofs(idProofs == null ? IdProofs.builder().build().toGrpcIDProofs() : idProofs.toGrpcIDProofs())
+                .setBankDetails(bankDetails == null ? BankDetails.builder().build().toGrpcBankDetails() : bankDetails.toGrpcBankDetails())
+                .setSalaryDetails(salaryDetails == null ? SalaryDetails.builder().build().toGrpcSalaryDetails() : salaryDetails.toGrpcSalaryDetails())
                 .build();
     }
-}
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-class BankDetails {
-    private String accountNumber;
-    private String accountHolderName;
-    private String ifscCode;
-    private String bankName;
-    private String branchName;
-}
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-class SalaryDetails {
-    private double totalCtc;
-    private double basic;
-    private double allowances;
-    private double hra;
-    private double pf;
 }

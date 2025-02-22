@@ -4,13 +4,15 @@ import com.example.MedhirBackend.exception.ValidationException;
 import com.example.MedhirBackend.repository.EmployeeRepository;
 import com.example.grpc.employee.*;
 import com.example.MedhirBackend.model.EmployeeModel;
+import com.example.MedhirBackend.model.IdProofs;
+import com.example.MedhirBackend.model.BankDetails;
+import com.example.MedhirBackend.model.SalaryDetails;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,27 @@ public class EmployeeService {
                 .reportingManager(request.getReportingManager())
                 .permanentAddress(request.getPermanentAddress())
                 .currentAddress(request.getCurrentAddress())
+                .idProofs(IdProofs.builder()
+                        .aadharNo(request.getIdProofs().getAadharNo())
+                        .panNo(request.getIdProofs().getPanNo())
+                        .passport(request.getIdProofs().getPassport())
+                        .drivingLicense(request.getIdProofs().getDrivingLicense())
+                        .voterId(request.getIdProofs().getVoterId())
+                        .build())
+                .bankDetails(BankDetails.builder()
+                        .accountNumber(request.getBankDetails().getAccountNumber())
+                        .accountHolderName(request.getBankDetails().getAccountHolderName())
+                        .ifscCode(request.getBankDetails().getIfscCode())
+                        .bankName(request.getBankDetails().getBankName())
+                        .branchName(request.getBankDetails().getBranchName())
+                        .build())
+                .salaryDetails(SalaryDetails.builder()
+                        .totalCtc(request.getSalaryDetails().getTotalCtc())
+                        .basic(request.getSalaryDetails().getBasic())
+                        .allowances(request.getSalaryDetails().getAllowances())
+                        .hra(request.getSalaryDetails().getHra())
+                        .pf(request.getSalaryDetails().getPf())
+                        .build())
                 .build();
 
         // Validate all fields

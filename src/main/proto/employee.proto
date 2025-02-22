@@ -9,6 +9,9 @@ option java_outer_classname = "EmployeeProto";
 service EmployeeService {
   rpc CreateEmployee (Employee) returns (EmployeeResponse);
   rpc GetAllEmployees (EmptyRequest) returns (EmployeeListResponse);
+  rpc UpdateEmployee (Employee) returns (EmployeeResponse);
+  rpc DeleteEmployee(DeleteEmployeeRequest) returns (DeleteEmployeeResponse);
+
 }
 
 message EmptyRequest {}
@@ -62,4 +65,10 @@ message EmployeeResponse {
 message EmployeeListResponse {
   string message = 1;
   repeated Employee employees = 2;
+}
+message  DeleteEmployeeRequest{
+  string id = 1;
+}
+message DeleteEmployeeResponse{
+  string message = 1;
 }
